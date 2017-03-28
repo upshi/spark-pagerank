@@ -1,1 +1,1 @@
-# 爬去网页并用Spark PageRank计算网页排序
+# 爬取网页并用Spark PageRank计算网页排序
