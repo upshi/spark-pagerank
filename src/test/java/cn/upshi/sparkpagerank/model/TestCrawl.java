@@ -3,12 +3,22 @@ package cn.upshi.sparkpagerank.model;
 import cn.upshi.sparkpagerank.crawl.Downloader;
 import cn.upshi.sparkpagerank.crawl.Scheduler;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
+import com.sun.xml.internal.xsom.impl.Ref;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.io.IOException;
 
 /**
  * spark-pagerank cn.upshi.sparkpagerank.model
@@ -47,8 +57,19 @@ public class TestCrawl {
     }
 
     @Test
+    public void testHttp() throws IOException {
+        HttpClient client = HttpClients.createDefault();
+        HttpGet get = new HttpGet("http://slide.sports.sina.com.cn/g_pl/slide_2_57057_123745.html");
+        HttpResponse response = client.execute(get);
+        HttpEntity entity = response.getEntity();
+        ContentType contentType = ContentType.getOrDefault(entity);
+        System.out.println(contentType);
+
+    }
+
+    @Test
     public void testSpider() {
-        scheduler.init(16, "http://sports.sina.com.cn");
+        scheduler.init(16, "http://sports.sina.com.cn/");
         scheduler.run();
     }
 

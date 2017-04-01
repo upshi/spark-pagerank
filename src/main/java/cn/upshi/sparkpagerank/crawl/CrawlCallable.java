@@ -63,9 +63,9 @@ public class CrawlCallable implements Callable<List<CrawlUrl>> {
                 //检查url格式，是否以http:// 或者 https://开头, 是否是sina.com.cn
                 String href = checkFormat(link.attr("href"));
                 if(href != null) {
-                    //判断是否已经存在,如果存在就什么都不做
                     tempUrl = crawlUrlDao.selectByUrl(href);
                     try {
+                        //判断是否已经存在,如果不存在就插入
                         if(tempUrl == null) {
                             //插入这个不存在的链接
                             tempUrl = new CrawlUrl();
@@ -74,15 +74,15 @@ public class CrawlCallable implements Callable<List<CrawlUrl>> {
 
                             logger.info("新增URL:" + tempUrl);
 
-                            //插入PageLink关系
-                            pageLink = new PageLink();
-                            pageLink.setFromId(crawlURL.getId());
-                            pageLink.setToId(tempUrl.getId());
-                            pageLinkDao.insert(pageLink);
-
-                            //加入集合返回
                             list.add(tempUrl);
                         }
+
+                        //插入PageLink关系
+                        pageLink = new PageLink();
+                        pageLink.setFromId(crawlURL.getId());
+                        pageLink.setToId(tempUrl.getId());
+                        pageLinkDao.insert(pageLink);
+
                     } catch (Exception e) {
                         break;
                     }
