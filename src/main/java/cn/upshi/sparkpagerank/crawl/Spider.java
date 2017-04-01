@@ -1,4 +1,4 @@
-package cn.upshi.sparkpagerank;
+package cn.upshi.sparkpagerank.crawl;
 
 /**
  * spark-pagerank cn.upshi.sparkpagerank

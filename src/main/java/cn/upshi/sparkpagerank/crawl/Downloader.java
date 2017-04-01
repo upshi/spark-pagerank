@@ -1,4 +1,4 @@
-package cn.upshi.sparkpagerank;
+package cn.upshi.sparkpagerank.crawl;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,9 +19,9 @@ import java.io.IOException;
 
 public class Downloader {
 
-    private static HttpClient client = HttpClients.createDefault();
+    private HttpClient client = HttpClients.createDefault();
 
-    public static Document download(String url) {
+    public Document download(String url) {
         HttpGet get = new HttpGet(url);
         get.setHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
         try {
@@ -29,7 +29,7 @@ public class Downloader {
             int statusCode = response.getStatusLine().getStatusCode();
             if(statusCode == 200) {
                 HttpEntity entity = response.getEntity();
-                Document document = Jsoup.parse(EntityUtils.toString(entity));
+                Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
                 return document;
             }
         } catch (IOException e) {
