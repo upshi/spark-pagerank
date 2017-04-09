@@ -32,7 +32,6 @@ public class URLManager {
 
     public CrawlUrl nextLink() {
         CrawlUrl poll = waitUrls.poll();
-        doneUrls.add(poll.getUrl());
         return poll;
     }
 
@@ -52,6 +51,10 @@ public class URLManager {
                 i++;
         }
         return i;
+    }
+
+    public void addDoneUrl(String url) {
+        doneUrls.add(url);
     }
 
 }

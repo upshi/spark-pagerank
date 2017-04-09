@@ -25,6 +25,13 @@
         where url = #{url,jdbcType=VARCHAR}
   </select>
 
+  <select id="selectAllEmptyTitle" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from crawl_url
+        where title = '';
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from crawl_url
     where id = #{id,jdbcType=INTEGER}

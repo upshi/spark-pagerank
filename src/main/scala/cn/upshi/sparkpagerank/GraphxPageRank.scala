@@ -1,7 +1,7 @@
 package cn.upshi.sparkpagerank
 
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.graphx.GraphLoader
+import org.apache.spark.{SparkConf, SparkContext}
 
 /**
   * spark-pagerank cn.upshi.sparkpagerank

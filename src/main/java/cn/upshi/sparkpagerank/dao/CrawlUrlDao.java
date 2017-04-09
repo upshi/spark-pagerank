@@ -2,6 +2,8 @@ package cn.upshi.sparkpagerank.dao;
 
 import cn.upshi.sparkpagerank.model.CrawlUrl;
 
+import java.util.List;
+
 public interface CrawlUrlDao {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,4 +22,7 @@ public interface CrawlUrlDao {
     CrawlUrl selectByUrl(String url);
 
     void truncate();
+
+    List<CrawlUrl> selectAllEmptyTitle();
+
 }

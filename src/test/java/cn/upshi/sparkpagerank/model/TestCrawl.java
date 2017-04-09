@@ -1,14 +1,15 @@
 package cn.upshi.sparkpagerank.model;
 
 import cn.upshi.sparkpagerank.crawl.Downloader;
-import cn.upshi.sparkpagerank.crawl.Scheduler;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
-import com.sun.xml.internal.xsom.impl.Ref;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.ContentType;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.nodes.Document;
@@ -19,6 +20,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * spark-pagerank cn.upshi.sparkpagerank.model
@@ -27,14 +30,11 @@ import java.io.IOException;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring.xml", "classpath:spring-mybatis.xml" })
+@ContextConfiguration(locations = {"classpath:spring.xml", "classpath:spring-mybatis.xml"})
 public class TestCrawl {
 
     @Autowired
     CrawlUrlDao dao;
-
-    @Autowired
-    Scheduler scheduler;
 
     @Test
     public void testTruncate() {
@@ -67,11 +67,6 @@ public class TestCrawl {
 
     }
 
-    @Test
-    public void testSpider() {
-        scheduler.init(16, "http://sports.sina.com.cn/");
-        scheduler.run();
-    }
-
 
 }
+
