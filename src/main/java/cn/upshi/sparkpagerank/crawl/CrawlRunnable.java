@@ -172,6 +172,12 @@ public class CrawlRunnable implements Runnable {
         //生成link文件
         pageLinkDao.exportLinkFile(fileName);
 
+        //设置状态
+        task.setStatus(Task.EXPORT);
+        taskDao.updateByPrimaryKey(task);
+
+
+
     }
 
     private static String checkFormat(String url) {
