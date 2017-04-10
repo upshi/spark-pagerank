@@ -16,7 +16,13 @@
         <include refid="Base_Column_List"/>
         from page_link
         where id = #{id,jdbcType=INTEGER}
-    </select>
+  </select>
+
+  <select id="exportLinkFile" parameterType="java.lang.String">
+        select DISTINCT from_id, to_id
+        into OUTFILE #{fileName,jdbcType=VARCHAR}
+        FIELDS TERMINATED BY ' ' from page_link ;
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from page_link

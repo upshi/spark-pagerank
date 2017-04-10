@@ -16,4 +16,6 @@ public interface PageLinkDao {
     int updateByPrimaryKey(PageLink record);
 
     void truncate();
+
+    void exportLinkFile(String fileName);
 }

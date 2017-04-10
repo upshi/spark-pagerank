@@ -29,6 +29,7 @@ public class CrawlUrlServiceImpl implements ICrawlUrlService {
     @Autowired
     private PageLinkDao pageLinkDao;
 
+    @Autowired
     private TaskDao taskDao;
 
     @Override

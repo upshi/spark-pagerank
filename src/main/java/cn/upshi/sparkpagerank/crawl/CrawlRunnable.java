@@ -6,6 +6,7 @@ import cn.upshi.sparkpagerank.dao.TaskDao;
 import cn.upshi.sparkpagerank.model.CrawlUrl;
 import cn.upshi.sparkpagerank.model.PageLink;
 import cn.upshi.sparkpagerank.model.Task;
+import cn.upshi.sparkpagerank.util.FileUtil;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -75,6 +76,12 @@ public class CrawlRunnable implements Runnable {
 
         Integer maxHandled = task.getMaxHandled();
 
+        Integer taskId = task.getId();
+
+        //设置状态
+        task.setStatus(Task.CRAWLING);
+        taskDao.updateByPrimaryKey(task);
+
         // 当已完成的链接的个数小于等于total并且url管理器中还有链接时,继续爬取
         while (urlManager.getDoneSize() <= maxHandled && urlManager.hasLink()) {
             // 获取下一个链接
@@ -101,7 +108,7 @@ public class CrawlRunnable implements Runnable {
 
             while (iterator.hasNext()) {
                 link = iterator.next();
-                //检查url格式，是否以http:// 或者 https://开头, 是否是sina.com.cn
+                //检查url格式，是否以http:// 或者 https://开头
                 String href = checkFormat(link.attr("href"));
                 if (href != null) {
                     // 查询该网页是否已经存在
@@ -138,25 +145,37 @@ public class CrawlRunnable implements Runnable {
         }
 
         // 查询所有title为空的crawlUrl，下载并且设置title
-        List<CrawlUrl> emptyTitles = crawlUrlDao.selectAllEmptyTitle();
-        for (CrawlUrl cu : emptyTitles) {
-            Document doc = downloader.download(cu.getUrl());
-            try {
-                if(doc == null) {
-                    crawlUrlDao.deleteByPrimaryKey(cu.getId());
-                    continue;
-                }
-                cu.setTitle(doc.title());
-                crawlUrlDao.updateTitle(cu);
-                logger.info("设置Title:" + cu);
-            } catch (Exception e) {
+        // List<CrawlUrl> emptyTitles = crawlUrlDao.selectAllEmptyTitle();
+        // for (CrawlUrl cu : emptyTitles) {
+        //     Document doc = downloader.download(cu.getUrl());
+        //     try {
+        //         if(doc == null) {
+        //             crawlUrlDao.deleteByPrimaryKey(cu.getId());
+        //             continue;
+        //         }
+        //         cu.setTitle(doc.title());
+        //         crawlUrlDao.updateTitle(cu);
+        //         logger.info("设置Title:" + cu);
+        //     } catch (Exception e) {
+        //
+        //     }
+        // }
 
-            }
-        }
+        //设置状态
+        task.setStatus(Task.CRAWLEND);
+        taskDao.updateByPrimaryKey(task);
+
+        //删除link文件
+        FileUtil.removeOldFile(taskId);
+        //获取文件名
+        String fileName = FileUtil.linkFileName(taskId);
+        //生成link文件
+        pageLinkDao.exportLinkFile(fileName);
+
     }
 
     private static String checkFormat(String url) {
-        if (url != null && url.indexOf("sports.sina.com.cn") > 0) {
+        if (url != null) {
             if (url.startsWith("//")) {
                 return "http:" + url;
             } else if (url.startsWith("http://") || url.startsWith("https://")) {

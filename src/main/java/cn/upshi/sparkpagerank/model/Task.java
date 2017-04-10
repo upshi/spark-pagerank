@@ -9,10 +9,12 @@ package cn.upshi.sparkpagerank.model;
 public class Task {
 
     public static final int CREAT = 0;
-    public static final int CRAWL = 1;
-    public static final int EXPORT = 2;
-    public static final int PAGERANK = 3;
-    public static final int FINISH = 4;
+    public static final int CRAWLING = 1;
+    public static final int CRAWLEND = 2;
+    public static final int EXPORT = 3;
+    public static final int PAGERANK = 4;
+    public static final int FINISH = 5;
+    public static final int INTERRUPTED = 6;
 
     private Integer id;
     private String startUrl;
