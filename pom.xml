@@ -196,7 +196,6 @@
             <systemPath>${basedir}/lib/chardet-1.0.jar</systemPath>
         </dependency>
 
-
         <dependency>
             <groupId>jargs</groupId>
             <artifactId>jargs</artifactId>
@@ -204,8 +203,6 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/jargs-1.0.jar</systemPath>
         </dependency>
-
-
 
 
         <dependency>

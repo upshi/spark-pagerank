@@ -22,7 +22,7 @@ public class Cpdetector {
          * cpDetector内置了一些常用的探测实现类，这些探测实现类的实例可以通过add方法 加进来，如ParsingDetector、
          * JChardetFacade、ASCIIDetector、UnicodeDetector。
          * detector按照“谁最先返回非空的探测结果，就以该结果为准”的原则返回探测到的
-         * 字符集编码。使用需要用到三个第三方JAR包：antlr.jar、chardet.jar和cpdetector.jar
+         * 字符集编码。使用需要用到三个第三方JAR包：antlr.jar、chardet.jar和jargs-1.0.jar
          * cpDetector是基于统计学原理的，不保证完全正确。
          */
         detector = CodepageDetectorProxy.getInstance();
@@ -49,8 +49,8 @@ public class Cpdetector {
     /**
      * 获取URL的编码
      *
-     * @param urlAddr
-     * @return
+     * @param urlAddr 网页URL
+     * @return 网页编码
      */
     public String getUrlEncode(String urlAddr) {
 

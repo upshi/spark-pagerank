@@ -4,7 +4,9 @@ import cn.upshi.sparkpagerank.crawl.CrawlRunnable;
 import cn.upshi.sparkpagerank.crawl.HttpClientDownloader;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
 import cn.upshi.sparkpagerank.dao.PageLinkDao;
+import cn.upshi.sparkpagerank.dao.TaskDao;
 import cn.upshi.sparkpagerank.model.CrawlUrl;
+import cn.upshi.sparkpagerank.model.Task;
 import cn.upshi.sparkpagerank.service.api.ICrawlUrlService;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,11 @@ public class CrawlUrlServiceImpl implements ICrawlUrlService {
     @Autowired
     private PageLinkDao pageLinkDao;
 
+    private TaskDao taskDao;
+
     @Override
-    public void crawl(String startUrl, int total) {
-        CrawlRunnable runnable = new CrawlRunnable(startUrl, total, crawlUrlDao, pageLinkDao);
+    public void crawl(Task task) {
+        CrawlRunnable runnable = new CrawlRunnable(task, crawlUrlDao, pageLinkDao, taskDao);
         new Thread(runnable).start();
     }
 

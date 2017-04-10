@@ -2,8 +2,10 @@ package cn.upshi.sparkpagerank.crawl;
 
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
 import cn.upshi.sparkpagerank.dao.PageLinkDao;
+import cn.upshi.sparkpagerank.dao.TaskDao;
 import cn.upshi.sparkpagerank.model.CrawlUrl;
 import cn.upshi.sparkpagerank.model.PageLink;
+import cn.upshi.sparkpagerank.model.Task;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,32 +25,30 @@ public class CrawlRunnable implements Runnable {
 
     Logger logger = Logger.getLogger(CrawlRunnable.class);
 
-    private String startUrl;
-
-    private int total;
+    private Task task;
 
     private CrawlUrlDao crawlUrlDao;
 
     private PageLinkDao pageLinkDao;
+
+    private TaskDao taskDao;
 
     private URLManager urlManager = new URLManager();
 
     // private IDownloader downloader = new HttpClientDownloader();
     private IDownloader downloader = new OkHttpDownloader();
 
-    public CrawlRunnable(String startUrl, int total, CrawlUrlDao crawlUrlDao, PageLinkDao pageLinkDao) {
-        this.startUrl = startUrl;
-        this.total = total;
+    public CrawlRunnable(Task task, CrawlUrlDao crawlUrlDao, PageLinkDao pageLinkDao, TaskDao taskDao) {
+        this.task = task;
         this.crawlUrlDao = crawlUrlDao;
         this.pageLinkDao = pageLinkDao;
+        this.taskDao = taskDao;
 
-        // 清空表
-        crawlUrlDao.truncate();
-        pageLinkDao.truncate();
         //插入第一个链接
         CrawlUrl crawlUrl = new CrawlUrl();
-        crawlUrl.setUrl(startUrl);
+        crawlUrl.setUrl(task.getStartUrl());
         crawlUrlDao.insert(crawlUrl);
+        crawlUrl.setTaskId(task.getId());
         //将第一个链接加入URL管理器
         urlManager.addLink(crawlUrl);
     }
@@ -73,8 +73,10 @@ public class CrawlRunnable implements Runnable {
         // 页面指向关系
         PageLink pageLink = null;
 
+        Integer maxHandled = task.getMaxHandled();
+
         // 当已完成的链接的个数小于等于total并且url管理器中还有链接时,继续爬取
-        while (urlManager.getDoneSize() <= total && urlManager.hasLink()) {
+        while (urlManager.getDoneSize() <= maxHandled && urlManager.hasLink()) {
             // 获取下一个链接
             crawlUrl = urlManager.nextLink();
             // 下载该网页

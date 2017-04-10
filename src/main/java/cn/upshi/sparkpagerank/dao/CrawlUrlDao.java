@@ -9,8 +9,6 @@ public interface CrawlUrlDao {
 
     int insert(CrawlUrl record);
 
-    int insertSelective(CrawlUrl record);
-
     CrawlUrl selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(CrawlUrl record);

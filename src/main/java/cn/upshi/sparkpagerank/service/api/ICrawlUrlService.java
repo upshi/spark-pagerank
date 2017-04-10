@@ -1,5 +1,7 @@
 package cn.upshi.sparkpagerank.service.api;
 
+import cn.upshi.sparkpagerank.model.Task;
+
 /**
  * spark-pagerank cn.upshi.sparkpagerank.service
  * 描述：
@@ -8,7 +10,7 @@ package cn.upshi.sparkpagerank.service.api;
 
 public interface ICrawlUrlService {
 
-    public void crawl(String startUrl, int total);
+    public void crawl(Task task);
 
     public void title();
 

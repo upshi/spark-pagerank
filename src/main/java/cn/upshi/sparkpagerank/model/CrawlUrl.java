@@ -14,13 +14,9 @@ public class CrawlUrl {
 
     private String title = "";
 
-    public CrawlUrl() {
-    }
+    private Integer taskId;
 
-    public CrawlUrl(Integer id, String url, String title) {
-        this.id = id;
-        this.url = url;
-        this.title = title;
+    public CrawlUrl() {
     }
 
     public Integer getId() {
@@ -47,12 +43,21 @@ public class CrawlUrl {
         this.title = title;
     }
 
+    public Integer getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
+    }
+
     @Override
     public String toString() {
         return "CrawlURL{" +
                 "id=" + id +
                 ", url='" + url + '\'' +
                 ", title=" + title +
+                ", taskId=" + taskId +
                 '}';
     }
 }
