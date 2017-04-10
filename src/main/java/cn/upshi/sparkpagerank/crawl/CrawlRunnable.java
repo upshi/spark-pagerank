@@ -33,7 +33,8 @@ public class CrawlRunnable implements Runnable {
 
     private URLManager urlManager = new URLManager();
 
-    private Downloader downloader = new Downloader();
+    // private IDownloader downloader = new HttpClientDownloader();
+    private IDownloader downloader = new OkHttpDownloader();
 
     public CrawlRunnable(String startUrl, int total, CrawlUrlDao crawlUrlDao, PageLinkDao pageLinkDao) {
         this.startUrl = startUrl;
@@ -138,18 +139,18 @@ public class CrawlRunnable implements Runnable {
         List<CrawlUrl> emptyTitles = crawlUrlDao.selectAllEmptyTitle();
         for (CrawlUrl cu : emptyTitles) {
             Document doc = downloader.download(cu.getUrl());
-            if(doc == null) {
-                crawlUrlDao.deleteByPrimaryKey(cu.getId());
-                continue;
-            }
-            cu.setTitle(doc.title());
             try {
+                if(doc == null) {
+                    crawlUrlDao.deleteByPrimaryKey(cu.getId());
+                    continue;
+                }
+                cu.setTitle(doc.title());
                 crawlUrlDao.updateTitle(cu);
+                logger.info("设置Title:" + cu);
             } catch (Exception e) {
 
             }
         }
-        System.out.println();
     }
 
     private static String checkFormat(String url) {

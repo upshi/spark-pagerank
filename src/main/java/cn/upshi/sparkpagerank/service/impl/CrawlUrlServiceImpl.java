@@ -1,7 +1,7 @@
 package cn.upshi.sparkpagerank.service.impl;
 
 import cn.upshi.sparkpagerank.crawl.CrawlRunnable;
-import cn.upshi.sparkpagerank.crawl.Downloader;
+import cn.upshi.sparkpagerank.crawl.HttpClientDownloader;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
 import cn.upshi.sparkpagerank.dao.PageLinkDao;
 import cn.upshi.sparkpagerank.model.CrawlUrl;
@@ -35,7 +35,7 @@ public class CrawlUrlServiceImpl implements ICrawlUrlService {
 
     @Override
     public void title() {
-        Downloader downloader = new Downloader();
+        HttpClientDownloader downloader = new HttpClientDownloader();
         List<CrawlUrl> emptyTitles = crawlUrlDao.selectAllEmptyTitle();
         for (CrawlUrl cu : emptyTitles) {
             Document doc = downloader.download(cu.getUrl());

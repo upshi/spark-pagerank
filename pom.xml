@@ -140,7 +140,6 @@
         </dependency>
 
         <!--  #################################   spark   ####################################  -->
-
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.11</artifactId>
@@ -165,6 +164,49 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+
+        <!--  #################################   cpdetector   ####################################  -->
+        <dependency>
+            <groupId>cpdetector</groupId>
+            <artifactId>cpdetector</artifactId>
+            <version>1.0.10</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cpdetector_1.0.10.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>2.7.4</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/antlr-2.7.4.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>chardet</groupId>
+            <artifactId>chardet</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/chardet-1.0.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>jargs</groupId>
+            <artifactId>jargs</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/jargs-1.0.jar</systemPath>
+        </dependency>
+
+
+
 
         <dependency>
             <groupId>junit</groupId>
@@ -207,6 +249,25 @@
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/lib</outputDirectory>
+                            <includeScope>system</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

@@ -1,17 +1,13 @@
 package cn.upshi.sparkpagerank.model;
 
-import cn.upshi.sparkpagerank.crawl.Downloader;
+import cn.upshi.sparkpagerank.crawl.HttpClientDownloader;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.ContentType;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * spark-pagerank cn.upshi.sparkpagerank.model
@@ -43,7 +37,7 @@ public class TestCrawl {
 
     @Test
     public void testDownloader() {
-        Downloader downloader = new Downloader();
+        HttpClientDownloader downloader = new HttpClientDownloader();
         Document document = downloader.download("http://www.sina.com.cn");
         System.out.println("-----------------" + document.title());
     }

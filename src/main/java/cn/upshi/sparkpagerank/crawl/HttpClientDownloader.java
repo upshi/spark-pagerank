@@ -19,14 +19,18 @@ import java.io.IOException;
  * 时间：2017-3-28 23:30.
  */
 
-public class Downloader {
+public class HttpClientDownloader implements IDownloader {
 
     private HttpClient client;
     private RequestConfig requestConfig;
 
-    public Downloader() {
+    public HttpClientDownloader() {
         client = HttpClients.createDefault();
-        requestConfig = RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build();
+        requestConfig = RequestConfig.custom()
+                                    .setSocketTimeout(3000)
+                                    .setConnectTimeout(3000)
+                                    .setConnectionRequestTimeout(3000)
+                                    .build();
     }
 
     public Document download(String url) {
@@ -91,7 +95,7 @@ public class Downloader {
     }
 
     public static void main(String[] args) {
-        Downloader downloader = new Downloader();
+        HttpClientDownloader downloader = new HttpClientDownloader();
         Document document = downloader.download("http://sports.sina.com.cn/nba/allstar2012/");
         System.out.println(document);
     }
