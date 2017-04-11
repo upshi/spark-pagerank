@@ -1,5 +1,6 @@
 package cn.upshi.sparkpagerank.dao;
 
+import cn.upshi.sparkpagerank.dto.Result;
 import cn.upshi.sparkpagerank.model.PageRankResult;
 
 import java.util.ArrayList;
@@ -22,5 +23,5 @@ public interface PageRankResultDao {
 
     void truncate();
 
-    List<PageRankResult> selectByTaskId(int taskId);
+    List<Result> selectByTaskId(int taskId);
 }

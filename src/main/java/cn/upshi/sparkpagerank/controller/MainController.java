@@ -1,6 +1,6 @@
 package cn.upshi.sparkpagerank.controller;
 
-import cn.upshi.sparkpagerank.model.PageRankResult;
+import cn.upshi.sparkpagerank.dto.Result;
 import cn.upshi.sparkpagerank.model.Task;
 import cn.upshi.sparkpagerank.service.api.ICrawlUrlService;
 import cn.upshi.sparkpagerank.service.api.IPageRankResultService;
@@ -55,7 +55,8 @@ public class MainController {
         }
         task.setId(taskId);
         crawlUrlService.crawl(task);
-        return dataMap;
+        dataMap.put("taskId", task.getId());
+        return RespUtil.success(dataMap);
     }
 
 
@@ -97,8 +98,8 @@ public class MainController {
             return RespUtil.error("任务尚未完成");
         }
 
-        List<PageRankResult> pageRankResults = pageRankResultService.selectByTaskId(taskId);
-        dataMap.put("pageRankResults", pageRankResults);
+        List<Result> pageRankResults = pageRankResultService.selectByTaskId(taskId);
+        dataMap.put("result", pageRankResults);
         return RespUtil.success(dataMap);
     }
 

@@ -1,7 +1,5 @@
 package cn.upshi.sparkpagerank.model;
 
-import java.util.List;
-
 /**
  * spark-pagerank cn.upshi.sparkpagerank.model
  * 描述：
@@ -14,7 +12,6 @@ public class PageRankResult {
     private Integer taskId;
     private Integer urlId;
     private String rank;
-    private List<CrawlUrl> crawlUrls;
 
     public PageRankResult() {
     }
@@ -57,14 +54,6 @@ public class PageRankResult {
         this.rank = rank;
     }
 
-    public List<CrawlUrl> getCrawlUrls() {
-        return crawlUrls;
-    }
-
-    public void setCrawlUrls(List<CrawlUrl> crawlUrls) {
-        this.crawlUrls = crawlUrls;
-    }
-
     @Override
     public String toString() {
         return "PageRankResult{" +
@@ -72,7 +61,6 @@ public class PageRankResult {
                 ", taskId=" + taskId +
                 ", urlId=" + urlId +
                 ", rank=" + rank +
-                ", crawlUrls=" + crawlUrls +
                 '}';
     }
 }

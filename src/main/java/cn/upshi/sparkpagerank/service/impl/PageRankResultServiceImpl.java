@@ -1,7 +1,7 @@
 package cn.upshi.sparkpagerank.service.impl;
 
 import cn.upshi.sparkpagerank.dao.PageRankResultDao;
-import cn.upshi.sparkpagerank.model.PageRankResult;
+import cn.upshi.sparkpagerank.dto.Result;
 import cn.upshi.sparkpagerank.service.api.IPageRankResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class PageRankResultServiceImpl implements IPageRankResultService {
     PageRankResultDao pageRankResultDao;
 
     @Override
-    public List<PageRankResult> selectByTaskId(int taskId) {
+    public List<Result> selectByTaskId(int taskId) {
         return pageRankResultDao.selectByTaskId(taskId);
     }
 }

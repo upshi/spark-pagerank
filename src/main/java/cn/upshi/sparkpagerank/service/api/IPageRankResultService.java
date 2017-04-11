@@ -1,6 +1,6 @@
 package cn.upshi.sparkpagerank.service.api;
 
-import cn.upshi.sparkpagerank.model.PageRankResult;
+import cn.upshi.sparkpagerank.dto.Result;
 
 import java.util.List;
 
@@ -12,6 +12,6 @@ import java.util.List;
 
 public interface IPageRankResultService {
 
-    List<PageRankResult> selectByTaskId(int taskId);
+    List<Result> selectByTaskId(int taskId);
 
 }

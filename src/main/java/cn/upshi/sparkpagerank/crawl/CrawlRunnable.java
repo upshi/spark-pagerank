@@ -90,6 +90,8 @@ public class CrawlRunnable implements Runnable {
         // 页面指向关系
         PageLink pageLink = null;
 
+        Integer totalUrl = task.getTotalUrl();
+
         Integer taskId = task.getId();
 
         //设置状态
@@ -101,7 +103,7 @@ public class CrawlRunnable implements Runnable {
 
 
         // 当已完成的链接的个数小于等于total并且url管理器中还有链接时,继续爬取
-        while (total < task.getTotalUrl() && urlManager.hasLink()) {
+        while (total < totalUrl && urlManager.hasLink()) {
             // 获取下一个链接
             crawlUrl = urlManager.nextLink();
 
@@ -126,7 +128,7 @@ public class CrawlRunnable implements Runnable {
             links = document.select("a[href]");
             iterator = links.iterator();
 
-            while (iterator.hasNext()) {
+            while (iterator.hasNext() && total < totalUrl) {
                 link = iterator.next();
                 //检查url格式，是否以http:// 或者 https://开头
                 String href = checkFormat(link.attr("href"));
@@ -144,6 +146,10 @@ public class CrawlRunnable implements Runnable {
                             logger.info("新增URL:" + tempUrl);
                             urlList.add(tempUrl);
                             total++;
+
+                            //设置爬取连接总数
+                            task.setHasHandled(total);
+                            taskDao.updateByPrimaryKey(task);
                         }
 
                         //插入PageLink关系
@@ -159,10 +165,6 @@ public class CrawlRunnable implements Runnable {
                     }
                 }
             }
-
-            //设置爬取连接总数
-            task.setHasHandled(total);
-            taskDao.updateByPrimaryKey(task);
 
             //向URL管理器中加入新的url
             urlManager.addLinks(urlList);
@@ -197,20 +199,19 @@ public class CrawlRunnable implements Runnable {
         // 查询title为空的crawlUrl，下载并且设置title
         for (PageRankResult prr : list) {
             CrawlUrl url = crawlUrlDao.selectByPrimaryKey(prr.getUrlId());
-            if(!StringUtil.isEmpty(url.getUrl())) {
-                continue;
-            }
-            Document doc = downloader.download(url.getUrl());
-            try {
-                if(doc == null) {
-                    crawlUrlDao.deleteByPrimaryKey(url.getId());
-                    continue;
+            if(StringUtil.isEmpty(url.getTitle())) {
+                Document doc = downloader.download(url.getUrl());
+                try {
+                    if(doc == null) {
+                        crawlUrlDao.deleteByPrimaryKey(url.getId());
+                        continue;
+                    }
+                    url.setTitle(doc.title());
+                    crawlUrlDao.updateTitle(url);
+                    logger.info("设置Title:" + url);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                url.setTitle(doc.title());
-                crawlUrlDao.updateTitle(url);
-                logger.info("设置Title:" + url);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
 

@@ -6,10 +6,6 @@
         <result column="task_id" property="taskId" jdbcType="INTEGER"/>
         <result column="url_id" property="urlId" jdbcType="INTEGER"/>
         <result column="rank" property="rank" jdbcType="VARCHAR"/>
-        <collection property="crawlUrls"
-                    column="url_id"
-                    ofType="cn.upshi.sparkpagerank.model.CrawlUrl"
-                    select="cn.upshi.sparkpagerank.dao.CrawlUrlDao.selectByPrimaryKey"/>
     </resultMap>
 
   <sql id="Base_Column_List">
@@ -23,11 +19,13 @@
         where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="selectByTaskId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from page_rank_result
-        where task_id = #{taskId,jdbcType=INTEGER}
+  <select id="selectByTaskId" resultType="cn.upshi.sparkpagerank.dto.Result" parameterType="java.lang.Integer">
+      select crawl_url.url, crawl_url.title, page_rank_result.rank
+      from crawl_url, page_rank_result
+      WHERE
+      crawl_url.id = page_rank_result.url_id
+      and page_rank_result.task_id = #{taskId,jdbcType=INTEGER}
+      ORDER BY rank DESC
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
