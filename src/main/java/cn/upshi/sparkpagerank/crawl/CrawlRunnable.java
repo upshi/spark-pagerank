@@ -10,6 +10,7 @@ import cn.upshi.sparkpagerank.model.PageLink;
 import cn.upshi.sparkpagerank.model.PageRankResult;
 import cn.upshi.sparkpagerank.model.Task;
 import cn.upshi.sparkpagerank.util.FileUtil;
+import cn.upshi.sparkpagerank.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -169,23 +170,6 @@ public class CrawlRunnable implements Runnable {
             taskDao.selectAndSetTotalUrl(taskId);
         }
 
-        // 查询所有title为空的crawlUrl，下载并且设置title
-        // List<CrawlUrl> emptyTitles = crawlUrlDao.selectAllEmptyTitle();
-        // for (CrawlUrl cu : emptyTitles) {
-        //     Document doc = downloader.download(cu.getUrl());
-        //     try {
-        //         if(doc == null) {
-        //             crawlUrlDao.deleteByPrimaryKey(cu.getId());
-        //             continue;
-        //         }
-        //         cu.setTitle(doc.title());
-        //         crawlUrlDao.updateTitle(cu);
-        //         logger.info("设置Title:" + cu);
-        //     } catch (Exception e) {
-        //
-        //     }
-        // }
-
         //设置状态 已爬取完毕
         task.setStatus(Task.CRAWLEND);
         task.setCrawlEndTime(sdf.format(new Date()));
@@ -206,6 +190,26 @@ public class CrawlRunnable implements Runnable {
         //计算pagerank生成结果
         ArrayList<PageRankResult> list = graphxPageRank.pageRank(taskId);
         pageRankResultDao.insertBatch(list);
+
+        // 查询title为空的crawlUrl，下载并且设置title
+        for (PageRankResult prr : list) {
+            CrawlUrl url = crawlUrlDao.selectByPrimaryKey(prr.getUrlId());
+            if(!StringUtil.isEmpty(url.getUrl())) {
+                continue;
+            }
+            Document doc = downloader.download(url.getUrl());
+            try {
+                if(doc == null) {
+                    crawlUrlDao.deleteByPrimaryKey(url.getId());
+                    continue;
+                }
+                url.setTitle(doc.title());
+                crawlUrlDao.updateTitle(url);
+                logger.info("设置Title:" + url);
+            } catch (Exception e) {
+
+            }
+        }
 
         //设置状态 已计算结果
         task.setStatus(Task.PAGERANK);

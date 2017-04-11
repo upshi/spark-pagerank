@@ -39,4 +39,9 @@ public class TaskServiceImpl implements ITaskService {
         PageInfo<Task> pageInfo = new PageInfo<Task>(tasks);
         return pageInfo;
     }
+
+    @Override
+    public Task get(int taskId) {
+        return taskDao.selectByPrimaryKey(taskId);
+    }
 }

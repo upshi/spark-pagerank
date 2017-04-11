@@ -1,7 +1,9 @@
 package cn.upshi.sparkpagerank.controller;
 
+import cn.upshi.sparkpagerank.model.PageRankResult;
 import cn.upshi.sparkpagerank.model.Task;
 import cn.upshi.sparkpagerank.service.api.ICrawlUrlService;
+import cn.upshi.sparkpagerank.service.api.IPageRankResultService;
 import cn.upshi.sparkpagerank.service.api.ITaskService;
 import cn.upshi.sparkpagerank.util.RespUtil;
 import com.github.pagehelper.PageInfo;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +33,9 @@ public class MainController {
 
     @Autowired
     private ITaskService taskService;
+
+    @Autowired
+    private IPageRankResultService pageRankResultService;
 
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -53,6 +59,20 @@ public class MainController {
         return dataMap;
     }
 
+
+    @ResponseBody
+    @RequestMapping("/getTask")
+    public Map<String, Object> getTasks(int taskId) {
+        Map<String, Object> dataMap = new HashMap();
+        Task task = taskService.get(taskId);
+        if(task != null) {
+            dataMap.put("task", task);
+            return RespUtil.success(dataMap);
+        } else {
+            return RespUtil.error("您输入的ID不存在");
+        }
+    }
+
     @ResponseBody
     @RequestMapping("/getTasks")
     public Map<String, Object> getTasks(@RequestParam(defaultValue = "1") int page,
@@ -64,6 +84,22 @@ public class MainController {
         dataMap.put("size", pageInfo.getSize());
         dataMap.put("total", pageInfo.getTotal());
 
+        return RespUtil.success(dataMap);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getResult")
+    public Map<String, Object> getResult(int taskId) {
+        Map<String, Object> dataMap = new HashMap();
+        Task task = taskService.get(taskId);
+        if(task == null) {
+            return RespUtil.error("您输入的ID不存在");
+        } else if(task.getStatus() != Task.PAGERANK) {
+            return RespUtil.error("任务尚未完成");
+        }
+
+        List<PageRankResult> pageRankResults = pageRankResultService.selectByTaskId(taskId);
+        dataMap.put("pageRankResults", pageRankResults);
         return RespUtil.success(dataMap);
     }
 

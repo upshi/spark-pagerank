@@ -3,6 +3,7 @@ package cn.upshi.sparkpagerank.dao;
 import cn.upshi.sparkpagerank.model.PageRankResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface PageRankResultDao {
     int deleteByPrimaryKey(Integer id);
@@ -20,4 +21,6 @@ public interface PageRankResultDao {
     int updateByPrimaryKey(PageRankResult record);
 
     void truncate();
+
+    List<PageRankResult> selectByTaskId(int taskId);
 }

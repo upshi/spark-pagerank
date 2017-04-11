@@ -14,4 +14,6 @@ public interface ITaskService {
     public Integer add(Task task);
 
     PageInfo<Task> search(int page, int size);
+
+    Task get(int taskId);
 }
