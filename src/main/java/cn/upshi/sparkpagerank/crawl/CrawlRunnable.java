@@ -147,9 +147,12 @@ public class CrawlRunnable implements Runnable {
                             urlList.add(tempUrl);
                             total++;
 
-                            //设置爬取连接总数
-                            task.setHasHandled(total);
-                            taskDao.updateByPrimaryKey(task);
+                            // 避免每次都插入数据库
+                            if(total % 20 == 0) {
+                                //设置爬取连接总数
+                                task.setHasHandled(total);
+                                taskDao.updateByPrimaryKey(task);
+                            }
                         }
 
                         //插入PageLink关系
@@ -172,12 +175,13 @@ public class CrawlRunnable implements Runnable {
             urlList.clear();
             // 将该链接加入已完成链接的集合中
             urlManager.addDoneUrl(crawlUrl.getUrl());
-
         }
 
         //设置状态 已爬取完毕
         task.setStatus(Task.CRAWLEND);
         task.setCrawlEndTime(sdf.format(new Date()));
+        //最终再设置爬取连接总数
+        task.setHasHandled(total);
         taskDao.updateByPrimaryKey(task);
 
         //删除link文件
