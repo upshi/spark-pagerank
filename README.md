@@ -1,6 +1,35 @@
 # 爬取网页并用Spark PageRank计算网页排序
 
 ## 接口说明
+
+### 返回值类型参考
+
+#### Task 类型
+```
+{
+      "id": 1,
+      "startUrl": "http://sports.sina.com.cn/",
+      "hasHandled": 10263,
+      "totalUrl": 10000,
+      "status": 4,
+      "createTime": "2017-04-11 21:18:38",
+      "crawlStartTime": "2017-04-11 21:18:38",
+      "crawlEndTime": "2017-04-11 21:34:41",
+      "exportTime": "2017-04-11 21:34:41",
+      "pageRankTime": "2017-04-11 21:34:45"
+}
+```
+
+#### Result 类型
+```
+{
+      "url": "http://sports.sina.com.cn/",
+      "title": "新浪体育_新浪网",
+      "rank": "0.15462049617670087"
+}
+```
+
+
 ### 1. 提交任务
 - 接口说明 
 
@@ -77,7 +106,7 @@
 
 |名称 |请求方法  |URL  |
 | :--------: | :--------: | :-------- |
-| 查询任务 | POST  | /api/getResult |
+| 查询任务结果 | POST  | /api/getResult |
 
 - 请求参数
 
@@ -99,12 +128,12 @@
 | 您输入的ID不存在 | 请求参数taskId不存在|
 |任务尚未完成 | 任务尚未完成 |
 
-### 5. 清空数组
+### 5. 清空数据
 - 接口说明 
 
 |名称 |请求方法  |URL  |
 | :--------: | :--------: | :-------- |
-| 查询任务 | post  | /api/truncate |
+| 清空数据 | post  | /api/truncate |
 
 - 请求参数
 
