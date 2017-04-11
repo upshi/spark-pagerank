@@ -33,6 +33,12 @@
         where title = '';
   </select>
 
+  <select id="selectTotalUrlByTaskId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+      select count(*) from crawl_url where task_id = #{taskId,jdbcType=INTEGER}
+  </select>
+
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from crawl_url
     where id = #{id,jdbcType=INTEGER}

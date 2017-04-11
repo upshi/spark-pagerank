@@ -65,7 +65,7 @@ public class CrawlRunnable implements Runnable {
         crawlUrl.setUrl(task.getStartUrl());
         crawlUrl.setTaskId(task.getId());
         crawlUrlDao.insert(crawlUrl);
-        crawlUrl.setTaskId(task.getId());
+
         //将第一个链接加入URL管理器
         urlManager.addLink(crawlUrl);
     }
@@ -99,12 +99,15 @@ public class CrawlRunnable implements Runnable {
         task.setCrawlStartTime(sdf.format(new Date()));
         taskDao.updateByPrimaryKey(task);
 
+
         // 当已完成的链接的个数小于等于total并且url管理器中还有链接时,继续爬取
         while (urlManager.getDoneSize() < maxHandled && urlManager.hasLink()) {
             // 获取下一个链接
             crawlUrl = urlManager.nextLink();
+
             // 下载该网页
             document = downloader.download(crawlUrl.getUrl());
+
             //网页可能已经不存在
             if (document == null) {
                 crawlUrlDao.deleteByPrimaryKey(crawlUrl.getId());
@@ -116,7 +119,7 @@ public class CrawlRunnable implements Runnable {
             try {
                 crawlUrlDao.updateTitle(crawlUrl);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
 
             // 获取当前网页上的所有链接
@@ -150,6 +153,7 @@ public class CrawlRunnable implements Runnable {
                         pageLinkDao.insert(pageLink);
 
                     } catch (Exception e) {
+                        e.printStackTrace();
                         break;
                     }
                 }
@@ -167,7 +171,9 @@ public class CrawlRunnable implements Runnable {
             taskDao.updateByPrimaryKey(task);
 
             //设置所有链接数
-            taskDao.selectAndSetTotalUrl(taskId);
+            int totalUrl = crawlUrlDao.selectTotalUrlByTaskId(taskId);
+            task.setTotalUrl(totalUrl);
+            taskDao.updateByPrimaryKey(task);
         }
 
         //设置状态 已爬取完毕
@@ -207,7 +213,7 @@ public class CrawlRunnable implements Runnable {
                 crawlUrlDao.updateTitle(url);
                 logger.info("设置Title:" + url);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
 

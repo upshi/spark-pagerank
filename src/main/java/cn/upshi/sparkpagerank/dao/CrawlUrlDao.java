@@ -24,4 +24,5 @@ public interface CrawlUrlDao {
 
     List<CrawlUrl> selectAllEmptyTitle();
 
+    Integer selectTotalUrlByTaskId(Integer taskId);
 }
