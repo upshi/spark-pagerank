@@ -11,14 +11,9 @@ public class PageLink {
     private Integer id;
     private Integer fromId;
     private Integer toId;
+    private Integer taskId;
 
     public PageLink() {
-    }
-
-    public PageLink(Integer id, Integer fromId, Integer toId) {
-        this.id = id;
-        this.fromId = fromId;
-        this.toId = toId;
     }
 
     public Integer getId() {
@@ -45,12 +40,21 @@ public class PageLink {
         this.toId = toId;
     }
 
+    public Integer getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
+    }
+
     @Override
     public String toString() {
         return "PageLink{" +
                 "id=" + id +
                 ", fromId=" + fromId +
                 ", toId=" + toId +
+                ", taskId=" + taskId +
                 '}';
     }
 }

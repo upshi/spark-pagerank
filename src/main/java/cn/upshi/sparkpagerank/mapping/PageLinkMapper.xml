@@ -5,10 +5,11 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="from_id" property="fromId" jdbcType="INTEGER"/>
         <result column="to_id" property="toId" jdbcType="INTEGER"/>
+        <result column="task_id" property="taskId" jdbcType="INTEGER"/>
     </resultMap>
 
   <sql id="Base_Column_List">
-    id, from_id, to_id
+    id, from_id, to_id, task_id
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -18,10 +19,10 @@
         where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="exportLinkFile" parameterType="java.lang.String">
+  <select id="exportLinkFile">
         select DISTINCT from_id, to_id
         into OUTFILE #{fileName,jdbcType=VARCHAR}
-        FIELDS TERMINATED BY ' ' from page_link ;
+        FIELDS TERMINATED BY ' ' from page_link where task_id = id = #{taskId,jdbcType=INTEGER};
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

@@ -2,14 +2,14 @@ package cn.upshi.sparkpagerank.dao;
 
 import cn.upshi.sparkpagerank.model.PageRankResult;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface PageRankResultDao {
     int deleteByPrimaryKey(Integer id);
 
     int insert(PageRankResult record);
 
-    int insertBatch(List<PageRankResult> list);
+    int insertBatch(ArrayList<PageRankResult> list);
 
     int insertSelective(PageRankResult record);
 

@@ -1,6 +1,7 @@
 package cn.upshi.sparkpagerank.dao;
 
 import cn.upshi.sparkpagerank.model.PageLink;
+import org.apache.ibatis.annotations.Param;
 
 public interface PageLinkDao {
     int deleteByPrimaryKey(Integer id);
@@ -17,5 +18,5 @@ public interface PageLinkDao {
 
     void truncate();
 
-    void exportLinkFile(String fileName);
+    void exportLinkFile(@Param("fileName") String fileName, @Param("taskId") Integer taskId);
 }

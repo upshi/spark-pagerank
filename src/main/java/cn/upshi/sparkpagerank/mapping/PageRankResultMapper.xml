@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.upshi.sparkpagerank.dao.PageRankResultMapper">
+<mapper namespace="cn.upshi.sparkpagerank.dao.PageRankResultDao">
     <resultMap id="BaseResultMap" type="cn.upshi.sparkpagerank.model.PageRankResult">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="task_id" property="taskId" jdbcType="INTEGER"/>
         <result column="url_id" property="urlId" jdbcType="INTEGER"/>
-        <result column="rank" property="rank" jdbcType="DOUBLE"/>
+        <result column="rank" property="rank" jdbcType="VARCHAR"/>
         <collection property="crawlUrls"
                     column="url_id"
                     ofType="cn.upshi.sparkpagerank.model.CrawlUrl"
@@ -29,20 +29,18 @@
   </delete>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
-    insert into page_rank_result (id, task_id, url_id, 
-      rank)
+    insert into page_rank_result (id, task_id, url_id, rank)
     values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{urlId,jdbcType=INTEGER}, 
-      #{rank,jdbcType=DOUBLE})
+      #{rank,jdbcType=VARCHAR})
   </insert>
 
   <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
-        insert into page_rank_result (id, task_id, url_id,rank)
+        insert into page_rank_result (task_id, url_id, rank)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{id,jdbcType=INTEGER},
-             #{taskId,jdbcType=INTEGER},
-             #{urlId,jdbcType=INTEGER},
-             #{rank,jdbcType=DOUBLE})
+            (#{item.taskId,jdbcType=INTEGER},
+             #{item.urlId,jdbcType=INTEGER},
+             #{item.rank,jdbcType=VARCHAR})
         </foreach>
   </insert>
 
@@ -73,7 +71,7 @@
                 #{urlId,jdbcType=INTEGER},
             </if>
             <if test="rank != null">
-                #{rank,jdbcType=DOUBLE},
+                #{rank,jdbcType=VARCHAR},
             </if>
         </trim>
   </insert>
@@ -88,7 +86,7 @@
                 url_id = #{urlId,jdbcType=INTEGER},
             </if>
             <if test="rank != null">
-                rank = #{rank,jdbcType=DOUBLE},
+                rank = #{rank,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -98,7 +96,7 @@
     update page_rank_result
     set task_id = #{taskId,jdbcType=INTEGER},
       url_id = #{urlId,jdbcType=INTEGER},
-      rank = #{rank,jdbcType=DOUBLE}
+      rank = #{rank,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -19,7 +19,7 @@ import collection.JavaConversions._
 @Component
 class GraphxPageRank {
 
-    def pageRank(taskId: Integer): java.util.List[PageRankResult] = {
+    def pageRank(taskId: Integer): java.util.ArrayList[PageRankResult] = {
 
         val conf = new SparkConf().setAppName("SinaPageRank")
             .setMaster("local")
@@ -35,7 +35,7 @@ class GraphxPageRank {
 
         val sorted = ranks.sortBy(x => x._2, false).take(10)
 
-        var list: java.util.List[PageRankResult] = new java.util.ArrayList()
+        var list: java.util.ArrayList[PageRankResult] = new java.util.ArrayList()
         for(i <- 0 to sorted.length-1 ) {
             list.add(toPageRankResult(taskId, sorted(i)._1, sorted(i)._2))
         }
@@ -43,7 +43,7 @@ class GraphxPageRank {
     }
 
     def toPageRankResult(taskId: Integer, id: VertexId, rank: Double): PageRankResult = {
-        new PageRankResult(taskId, id.toInt, rank)
+        new PageRankResult(taskId, id.toInt, rank.toString)
     }
 
     def main(args: Array[String]): Unit = {

@@ -2,6 +2,7 @@ package cn.upshi.sparkpagerank.model;
 
 import cn.upshi.sparkpagerank.GraphxPageRank;
 import cn.upshi.sparkpagerank.dao.PageLinkDao;
+import cn.upshi.sparkpagerank.dao.PageRankResultDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +25,16 @@ public class TestExport {
 
     @Autowired
     PageLinkDao dao;
+
+    @Autowired
+    PageRankResultDao pageRankResultDao;
+
     @Autowired
     GraphxPageRank graphxPageRank;
 
     @Test
     public void testHttp() throws IOException {
-       dao.exportLinkFile("d:/links/1.txt");
+       dao.exportLinkFile("d:/links/1.txt", 2);
     }
 
     @Test
@@ -37,6 +43,12 @@ public class TestExport {
         for (PageRankResult p : list) {
             System.out.println(p);
         }
+    }
+
+    @Test
+    public void testInsertBatch() throws IOException {
+        ArrayList<PageRankResult> list = graphxPageRank.pageRank(2);
+        pageRankResultDao.insertBatch(list);
     }
 
 

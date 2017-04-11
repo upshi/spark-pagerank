@@ -185,14 +185,14 @@ public class CrawlRunnable implements Runnable {
         //获取文件名
         String fileName = FileUtil.linkFileName(taskId);
         //生成link文件
-        pageLinkDao.exportLinkFile(fileName);
+        pageLinkDao.exportLinkFile(fileName, taskId);
 
         //设置状态 已导出文件
         task.setStatus(Task.EXPORT);
         taskDao.updateByPrimaryKey(task);
 
         //计算pagerank生成结果
-        List<PageRankResult> list = graphxPageRank.pageRank(taskId);
+        ArrayList<PageRankResult> list = graphxPageRank.pageRank(taskId);
         pageRankResultDao.insertBatch(list);
 
         //设置状态 已计算结果

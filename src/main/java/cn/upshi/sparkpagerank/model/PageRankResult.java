@@ -13,13 +13,13 @@ public class PageRankResult {
     private Integer id;
     private Integer taskId;
     private Integer urlId;
-    private Double rank;
+    private String rank;
     private List<CrawlUrl> crawlUrls;
 
     public PageRankResult() {
     }
 
-    public PageRankResult(Integer taskId, Integer urlId, Double rank) {
+    public PageRankResult(Integer taskId, Integer urlId, String rank) {
         this.taskId = taskId;
         this.urlId = urlId;
         this.rank = rank;
@@ -49,11 +49,11 @@ public class PageRankResult {
         this.urlId = urlId;
     }
 
-    public Double getRank() {
+    public String getRank() {
         return rank;
     }
 
-    public void setRank(Double rank) {
+    public void setRank(String rank) {
         this.rank = rank;
     }
 
