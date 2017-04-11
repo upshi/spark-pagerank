@@ -110,7 +110,7 @@ public class MainController {
             taskService.truncate();
             return RespUtil.success(null);
         } else {
-            return RespUtil.error("您的操作有误");
+            return RespUtil.error("您的密码有误!");
         }
     }
 
