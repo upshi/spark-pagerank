@@ -18,7 +18,6 @@ public class Task {
     private Integer id;
     private String startUrl;
     private Integer hasHandled;
-    private Integer maxHandled;
     private Integer totalUrl;
     private Integer status;
 
@@ -53,14 +52,6 @@ public class Task {
 
     public void setHasHandled(Integer hasHandled) {
         this.hasHandled = hasHandled;
-    }
-
-    public Integer getMaxHandled() {
-        return maxHandled;
-    }
-
-    public void setMaxHandled(Integer maxHandled) {
-        this.maxHandled = maxHandled;
     }
 
     public Integer getTotalUrl() {
@@ -125,7 +116,6 @@ public class Task {
                 "id=" + id +
                 ", startUrl='" + startUrl + '\'' +
                 ", hasHandled=" + hasHandled +
-                ", maxHandled=" + maxHandled +
                 ", totalUrl=" + totalUrl +
                 ", status=" + status +
                 ", createTime='" + createTime + '\'' +

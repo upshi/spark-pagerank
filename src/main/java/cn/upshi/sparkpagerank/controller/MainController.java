@@ -46,8 +46,7 @@ public class MainController {
         Task task = new Task();
         task.setHasHandled(0);
         task.setStartUrl(startUrl);
-        task.setMaxHandled(total);
-        task.setTotalUrl(0);
+        task.setTotalUrl(total);
         task.setCreateTime(sdf.format(new Date()));
         task.setStatus(Task.CREAT);
         Integer taskId = taskService.add(task);
@@ -103,5 +102,15 @@ public class MainController {
         return RespUtil.success(dataMap);
     }
 
+    @ResponseBody
+    @RequestMapping("/truncate")
+    public Map<String, Object> truncate(String password) {
+        if(password != null && "upshi".equals(password)) {
+            taskService.truncate();
+            return RespUtil.success(null);
+        } else {
+            return RespUtil.error("您的操作有误");
+        }
+    }
 
 }

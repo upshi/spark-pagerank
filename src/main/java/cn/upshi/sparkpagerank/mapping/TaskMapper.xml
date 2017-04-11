@@ -5,7 +5,6 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="start_url" property="startUrl" jdbcType="VARCHAR"/>
         <result column="has_handled" property="hasHandled" jdbcType="INTEGER"/>
-        <result column="max_handled" property="maxHandled" jdbcType="INTEGER"/>
         <result column="total_url" property="totalUrl" jdbcType="INTEGER"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
@@ -15,7 +14,7 @@
         <result column="page_rank_time" property="pageRankTime" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, start_url, has_handled, max_handled, total_url, status, create_time, crawl_start_time, crawl_end_time, export_time, page_rank_time
+    id, start_url, has_handled, total_url, status, create_time, crawl_start_time, crawl_end_time, export_time, page_rank_time
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -43,9 +42,9 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.Task">
     insert into task (id, start_url, has_handled, 
-      max_handled, total_url, status, create_time, crawl_start_time, crawl_end_time, export_time, page_rank_time)
+      total_url, status, create_time, crawl_start_time, crawl_end_time, export_time, page_rank_time)
     values (#{id,jdbcType=INTEGER}, #{startUrl,jdbcType=VARCHAR}, #{hasHandled,jdbcType=INTEGER}, 
-      #{maxHandled,jdbcType=INTEGER}, #{totalUrl,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+      #{totalUrl,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
       #{createTime,jdbcType=VARCHAR},#{crawlStartTime,jdbcType=VARCHAR},#{crawlEndTime,jdbcType=VARCHAR},#{exportTime,jdbcType=VARCHAR},#{pageRankTime,jdbcType=VARCHAR}
       )
   </insert>
@@ -54,7 +53,6 @@
     update task
     set start_url = #{startUrl,jdbcType=VARCHAR},
       has_handled = #{hasHandled,jdbcType=INTEGER},
-      max_handled = #{maxHandled,jdbcType=INTEGER},
       total_url = #{totalUrl,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=VARCHAR},

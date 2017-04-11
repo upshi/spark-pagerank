@@ -90,8 +90,6 @@ public class CrawlRunnable implements Runnable {
         // 页面指向关系
         PageLink pageLink = null;
 
-        Integer maxHandled = task.getMaxHandled();
-
         Integer taskId = task.getId();
 
         //设置状态
@@ -99,9 +97,11 @@ public class CrawlRunnable implements Runnable {
         task.setCrawlStartTime(sdf.format(new Date()));
         taskDao.updateByPrimaryKey(task);
 
+        int total = 1;
+
 
         // 当已完成的链接的个数小于等于total并且url管理器中还有链接时,继续爬取
-        while (urlManager.getDoneSize() < maxHandled && urlManager.hasLink()) {
+        while (total < task.getTotalUrl() && urlManager.hasLink()) {
             // 获取下一个链接
             crawlUrl = urlManager.nextLink();
 
@@ -143,6 +143,7 @@ public class CrawlRunnable implements Runnable {
                             crawlUrlDao.insert(tempUrl);
                             logger.info("新增URL:" + tempUrl);
                             urlList.add(tempUrl);
+                            total++;
                         }
 
                         //插入PageLink关系
@@ -159,6 +160,10 @@ public class CrawlRunnable implements Runnable {
                 }
             }
 
+            //设置爬取连接总数
+            task.setHasHandled(total);
+            taskDao.updateByPrimaryKey(task);
+
             //向URL管理器中加入新的url
             urlManager.addLinks(urlList);
             //清空url集合
@@ -166,14 +171,6 @@ public class CrawlRunnable implements Runnable {
             // 将该链接加入已完成链接的集合中
             urlManager.addDoneUrl(crawlUrl.getUrl());
 
-            //设置task已完成的数量
-            task.setHasHandled(task.getHasHandled() + 1);
-            taskDao.updateByPrimaryKey(task);
-
-            //设置所有链接数
-            int totalUrl = crawlUrlDao.selectTotalUrlByTaskId(taskId);
-            task.setTotalUrl(totalUrl);
-            taskDao.updateByPrimaryKey(task);
         }
 
         //设置状态 已爬取完毕

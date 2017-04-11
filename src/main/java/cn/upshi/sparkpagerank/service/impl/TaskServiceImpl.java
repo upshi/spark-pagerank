@@ -1,5 +1,8 @@
 package cn.upshi.sparkpagerank.service.impl;
 
+import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
+import cn.upshi.sparkpagerank.dao.PageLinkDao;
+import cn.upshi.sparkpagerank.dao.PageRankResultDao;
 import cn.upshi.sparkpagerank.dao.TaskDao;
 import cn.upshi.sparkpagerank.model.Task;
 import cn.upshi.sparkpagerank.service.api.ITaskService;
@@ -20,7 +23,16 @@ import java.util.List;
 public class TaskServiceImpl implements ITaskService {
 
     @Autowired
-    private TaskDao taskDao;
+    CrawlUrlDao crawlUrlDao;
+
+    @Autowired
+    private PageLinkDao pageLinkDao;
+
+    @Autowired
+    TaskDao taskDao;
+
+    @Autowired
+    PageRankResultDao pageRankResultDao;
 
     @Override
     public Integer add(Task task) {
@@ -43,5 +55,13 @@ public class TaskServiceImpl implements ITaskService {
     @Override
     public Task get(int taskId) {
         return taskDao.selectByPrimaryKey(taskId);
+    }
+
+    @Override
+    public void truncate() {
+        crawlUrlDao.truncate();
+        pageLinkDao.truncate();
+        taskDao.truncate();
+        pageRankResultDao.truncate();
     }
 }

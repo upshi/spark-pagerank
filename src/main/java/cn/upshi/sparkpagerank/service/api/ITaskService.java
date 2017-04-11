@@ -16,4 +16,6 @@ public interface ITaskService {
     PageInfo<Task> search(int page, int size);
 
     Task get(int taskId);
+
+    void truncate();
 }
