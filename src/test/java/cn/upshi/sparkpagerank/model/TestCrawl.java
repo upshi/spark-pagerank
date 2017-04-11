@@ -2,6 +2,9 @@ package cn.upshi.sparkpagerank.model;
 
 import cn.upshi.sparkpagerank.crawl.HttpClientDownloader;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
+import cn.upshi.sparkpagerank.dao.PageLinkDao;
+import cn.upshi.sparkpagerank.dao.PageRankResultDao;
+import cn.upshi.sparkpagerank.dao.TaskDao;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -28,37 +31,23 @@ import java.io.IOException;
 public class TestCrawl {
 
     @Autowired
-    CrawlUrlDao dao;
+    CrawlUrlDao crawlUrlDao;
+
+    @Autowired
+    private PageLinkDao pageLinkDao;
+
+    @Autowired
+    TaskDao taskDao;
+
+    @Autowired
+    PageRankResultDao pageRankResultDao;
 
     @Test
     public void testTruncate() {
-        dao.truncate();
-    }
-
-    @Test
-    public void testDownloader() {
-        HttpClientDownloader downloader = new HttpClientDownloader();
-        Document document = downloader.download("http://www.sina.com.cn");
-        System.out.println("-----------------" + document.title());
-    }
-
-    @Test
-    public void testInsert() {
-        CrawlUrl crawlUrl = new CrawlUrl();
-        crawlUrl.setUrl("sad");
-        crawlUrl.setTitle("新浪首页");
-        dao.insert(crawlUrl);
-    }
-
-    @Test
-    public void testHttp() throws IOException {
-        HttpClient client = HttpClients.createDefault();
-        HttpGet get = new HttpGet("http://slide.sports.sina.com.cn/g_pl/slide_2_57057_123745.html");
-        HttpResponse response = client.execute(get);
-        HttpEntity entity = response.getEntity();
-        ContentType contentType = ContentType.getOrDefault(entity);
-        System.out.println(contentType);
-
+        crawlUrlDao.truncate();
+        pageLinkDao.truncate();
+        taskDao.truncate();
+        pageRankResultDao.truncate();
     }
 
 

@@ -93,7 +93,7 @@ public class CrawlRunnable implements Runnable {
         taskDao.updateByPrimaryKey(task);
 
         // 当已完成的链接的个数小于等于total并且url管理器中还有链接时,继续爬取
-        while (urlManager.getDoneSize() <= maxHandled && urlManager.hasLink()) {
+        while (urlManager.getDoneSize() < maxHandled && urlManager.hasLink()) {
             // 获取下一个链接
             crawlUrl = urlManager.nextLink();
             // 下载该网页
@@ -122,7 +122,7 @@ public class CrawlRunnable implements Runnable {
                 String href = checkFormat(link.attr("href"));
                 if (href != null) {
                     // 查询该网页是否已经存在
-                    tempUrl = crawlUrlDao.selectByUrl(href);
+                    tempUrl = crawlUrlDao.selectByUrlAndTaskId(href, taskId);
                     try {
                         //判断是否已经存在,如果不存在就插入
                         if (tempUrl == null) {
@@ -139,6 +139,7 @@ public class CrawlRunnable implements Runnable {
                         pageLink = new PageLink();
                         pageLink.setFromId(crawlUrl.getId());
                         pageLink.setToId(tempUrl.getId());
+                        pageLink.setTaskId(taskId);
                         pageLinkDao.insert(pageLink);
 
                     } catch (Exception e) {
@@ -157,6 +158,9 @@ public class CrawlRunnable implements Runnable {
             //设置task已完成的数量
             task.setHasHandled(task.getHasHandled() + 1);
             taskDao.updateByPrimaryKey(task);
+
+            //设置所有链接数
+            taskDao.selectAndSetTotalUrl(taskId);
         }
 
         // 查询所有title为空的crawlUrl，下载并且设置title
@@ -198,9 +202,6 @@ public class CrawlRunnable implements Runnable {
         //设置状态 已计算结果
         task.setStatus(Task.PAGERANK);
         taskDao.updateByPrimaryKey(task);
-
-        //设置所有链接数
-        taskDao.selectAndSetTotalUrl(taskId);
 
     }
 

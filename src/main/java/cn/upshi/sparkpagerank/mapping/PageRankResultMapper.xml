@@ -28,6 +28,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
+  <delete id="truncate">
+      truncate table page_rank_result
+  </delete>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
     insert into page_rank_result (id, task_id, url_id, rank)
     values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{urlId,jdbcType=INTEGER}, 

@@ -19,12 +19,13 @@ import collection.JavaConversions._
 @Component
 class GraphxPageRank {
 
-    def pageRank(taskId: Integer): java.util.ArrayList[PageRankResult] = {
+    val conf = new SparkConf().setAppName("SinaPageRank")
+        .setMaster("local")
+        .set("spark.executor.memory", "2G");
 
-        val conf = new SparkConf().setAppName("SinaPageRank")
-            .setMaster("local")
-            .set("spark.executor.memory", "2G");
-        val sc = new SparkContext(conf);
+    val sc = new SparkContext(conf);
+
+    def pageRank(taskId: Integer): java.util.ArrayList[PageRankResult] = {
 
         var fileName: String = FileUtil.linkFileName(taskId)
 
@@ -44,10 +45,6 @@ class GraphxPageRank {
 
     def toPageRankResult(taskId: Integer, id: VertexId, rank: Double): PageRankResult = {
         new PageRankResult(taskId, id.toInt, rank.toString)
-    }
-
-    def main(args: Array[String]): Unit = {
-
     }
 
 }

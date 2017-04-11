@@ -18,4 +18,6 @@ public interface PageRankResultDao {
     int updateByPrimaryKeySelective(PageRankResult record);
 
     int updateByPrimaryKey(PageRankResult record);
+
+    void truncate();
 }

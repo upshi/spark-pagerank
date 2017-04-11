@@ -25,6 +25,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
+  <delete id="truncate">
+    truncate table task
+  </delete>
+
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.Task">
     insert into task (id, start_url, has_handled, 
       max_handled, total_url, status

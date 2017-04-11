@@ -16,4 +16,6 @@ public interface TaskDao {
     int updateByPrimaryKey(Task record);
 
     int selectAndSetTotalUrl(Integer taskId);
+
+    void truncate();
 }

@@ -1,6 +1,7 @@
 package cn.upshi.sparkpagerank.dao;
 
 import cn.upshi.sparkpagerank.model.CrawlUrl;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface CrawlUrlDao {
 
     int updateTitle(CrawlUrl crawlURL);
 
-    CrawlUrl selectByUrl(String url);
+    CrawlUrl selectByUrlAndTaskId(@Param("url") String url, @Param("taskId") Integer taskId);
 
     void truncate();
 

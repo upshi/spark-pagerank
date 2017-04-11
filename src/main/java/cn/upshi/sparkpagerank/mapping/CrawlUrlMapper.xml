@@ -19,11 +19,11 @@
         where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="selectByUrl" resultMap="BaseResultMap" parameterType="java.lang.String">
+  <select id="selectByUrlAndTaskId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from crawl_url
-        where url = #{url,jdbcType=VARCHAR}
+        where url = #{url,jdbcType=VARCHAR} and task_id = #{taskId,jdbcType=INTEGER}
   </select>
 
   <select id="selectAllEmptyTitle" resultMap="BaseResultMap">

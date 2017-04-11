@@ -8,8 +8,6 @@ public interface PageLinkDao {
 
     int insert(PageLink record);
 
-    int insertSelective(PageLink record);
-
     PageLink selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(PageLink record);
