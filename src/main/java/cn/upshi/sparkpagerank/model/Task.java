@@ -13,8 +13,7 @@ public class Task {
     public static final int CRAWLEND = 2;
     public static final int EXPORT = 3;
     public static final int PAGERANK = 4;
-    public static final int FINISH = 5;
-    public static final int INTERRUPTED = 6;
+    public static final int INTERRUPTED = 5;
 
     private Integer id;
     private String startUrl;
@@ -23,16 +22,13 @@ public class Task {
     private Integer totalUrl;
     private Integer status;
 
-    public Task() {
-    }
+    private String createTime;
+    private String crawlStartTime;
+    private String crawlEndTime;
+    private String exportTime;
+    private String pageRankTime;
 
-    public Task(Integer id, String startUrl, Integer hasHandled, Integer maxHandled, Integer totalUrl, Integer status) {
-        this.id = id;
-        this.startUrl = startUrl;
-        this.hasHandled = hasHandled;
-        this.maxHandled = maxHandled;
-        this.totalUrl = totalUrl;
-        this.status = status;
+    public Task() {
     }
 
     public Integer getId() {
@@ -83,6 +79,46 @@ public class Task {
         this.status = status;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCrawlStartTime() {
+        return crawlStartTime;
+    }
+
+    public void setCrawlStartTime(String crawlStartTime) {
+        this.crawlStartTime = crawlStartTime;
+    }
+
+    public String getCrawlEndTime() {
+        return crawlEndTime;
+    }
+
+    public void setCrawlEndTime(String crawlEndTime) {
+        this.crawlEndTime = crawlEndTime;
+    }
+
+    public String getExportTime() {
+        return exportTime;
+    }
+
+    public void setExportTime(String exportTime) {
+        this.exportTime = exportTime;
+    }
+
+    public String getPageRankTime() {
+        return pageRankTime;
+    }
+
+    public void setPageRankTime(String pageRankTime) {
+        this.pageRankTime = pageRankTime;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -92,6 +128,11 @@ public class Task {
                 ", maxHandled=" + maxHandled +
                 ", totalUrl=" + totalUrl +
                 ", status=" + status +
+                ", createTime='" + createTime + '\'' +
+                ", crawlStartTime='" + crawlStartTime + '\'' +
+                ", crawlEndTime='" + crawlEndTime + '\'' +
+                ", exportTime='" + exportTime + '\'' +
+                ", pageRankTime='" + pageRankTime + '\'' +
                 '}';
     }
 }

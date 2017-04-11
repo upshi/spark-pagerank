@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +29,8 @@ public class MainController {
     @Autowired
     private ITaskService taskService;
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @ResponseBody
     @RequestMapping("/start")
     public Map<String, Object> start(String startUrl, int total) {
@@ -36,6 +40,7 @@ public class MainController {
         task.setStartUrl(startUrl);
         task.setMaxHandled(total);
         task.setTotalUrl(0);
+        task.setCreateTime(sdf.format(new Date()));
         task.setStatus(Task.CREAT);
         Integer taskId = taskService.add(task);
         if(taskId == null) {

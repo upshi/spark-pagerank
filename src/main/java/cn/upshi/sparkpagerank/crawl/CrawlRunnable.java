@@ -15,7 +15,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,6 +44,9 @@ public class CrawlRunnable implements Runnable {
     private GraphxPageRank graphxPageRank;
 
     private URLManager urlManager = new URLManager();
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     // private IDownloader downloader = new HttpClientDownloader();
     private IDownloader downloader = new OkHttpDownloader();
@@ -90,6 +95,7 @@ public class CrawlRunnable implements Runnable {
 
         //设置状态
         task.setStatus(Task.CRAWLING);
+        task.setCrawlStartTime(sdf.format(new Date()));
         taskDao.updateByPrimaryKey(task);
 
         // 当已完成的链接的个数小于等于total并且url管理器中还有链接时,继续爬取
@@ -182,6 +188,7 @@ public class CrawlRunnable implements Runnable {
 
         //设置状态 已爬取完毕
         task.setStatus(Task.CRAWLEND);
+        task.setCrawlEndTime(sdf.format(new Date()));
         taskDao.updateByPrimaryKey(task);
 
         //删除link文件
@@ -193,6 +200,7 @@ public class CrawlRunnable implements Runnable {
 
         //设置状态 已导出文件
         task.setStatus(Task.EXPORT);
+        task.setExportTime(sdf.format(new Date()));
         taskDao.updateByPrimaryKey(task);
 
         //计算pagerank生成结果
@@ -201,6 +209,7 @@ public class CrawlRunnable implements Runnable {
 
         //设置状态 已计算结果
         task.setStatus(Task.PAGERANK);
+        task.setPageRankTime(sdf.format(new Date()));
         taskDao.updateByPrimaryKey(task);
 
     }
