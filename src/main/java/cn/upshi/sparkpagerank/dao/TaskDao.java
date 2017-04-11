@@ -2,6 +2,8 @@ package cn.upshi.sparkpagerank.dao;
 
 import cn.upshi.sparkpagerank.model.Task;
 
+import java.util.List;
+
 public interface TaskDao {
     int deleteByPrimaryKey(Integer id);
 
@@ -18,4 +20,6 @@ public interface TaskDao {
     int selectAndSetTotalUrl(Integer taskId);
 
     void truncate();
+
+    List<Task> search();
 }

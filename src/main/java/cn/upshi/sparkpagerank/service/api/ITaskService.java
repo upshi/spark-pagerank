@@ -1,6 +1,7 @@
 package cn.upshi.sparkpagerank.service.api;
 
 import cn.upshi.sparkpagerank.model.Task;
+import com.github.pagehelper.PageInfo;
 
 /**
  * spark-pagerank cn.upshi.sparkpagerank.service.api
@@ -12,4 +13,5 @@ public interface ITaskService {
 
     public Integer add(Task task);
 
+    PageInfo<Task> search(int page, int size);
 }

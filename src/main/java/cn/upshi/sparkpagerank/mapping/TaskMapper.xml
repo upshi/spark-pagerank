@@ -25,6 +25,13 @@
         where id = #{id,jdbcType=INTEGER}
   </select>
 
+  <select id="search" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from task
+        order by create_time desc
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from task
     where id = #{id,jdbcType=INTEGER}
@@ -61,5 +68,6 @@
   <update id="selectAndSetTotalUrl" parameterType="java.lang.Integer">
     update task
     set total_url = (select count(*) from crawl_url where task_id = #{taskId,jdbcType=INTEGER})
+    where id = #{taskId,jdbcType=INTEGER}
   </update>
 </mapper>

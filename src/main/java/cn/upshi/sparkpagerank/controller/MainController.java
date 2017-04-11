@@ -4,9 +4,11 @@ import cn.upshi.sparkpagerank.model.Task;
 import cn.upshi.sparkpagerank.service.api.ICrawlUrlService;
 import cn.upshi.sparkpagerank.service.api.ITaskService;
 import cn.upshi.sparkpagerank.util.RespUtil;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
@@ -52,11 +54,17 @@ public class MainController {
     }
 
     @ResponseBody
-    @RequestMapping("/title")
-    public Map<String, Object> title() {
-        Map<String, Object> map = new HashMap();
-        crawlUrlService.title();
-        return map;
+    @RequestMapping("/getTasks")
+    public Map<String, Object> getTasks(@RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int size) {
+        Map<String, Object> dataMap = new HashMap();
+        PageInfo<Task> pageInfo = taskService.search(page, size);
+        dataMap.put("tasks", pageInfo.getList());
+        dataMap.put("page", page);
+        dataMap.put("size", pageInfo.getSize());
+        dataMap.put("total", pageInfo.getTotal());
+
+        return RespUtil.success(dataMap);
     }
 
 
