@@ -1,10 +1,13 @@
 package cn.upshi.sparkpagerank.crawl;
 
+import cn.upshi.sparkpagerank.GraphxPageRank;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
 import cn.upshi.sparkpagerank.dao.PageLinkDao;
+import cn.upshi.sparkpagerank.dao.PageRankResultDao;
 import cn.upshi.sparkpagerank.dao.TaskDao;
 import cn.upshi.sparkpagerank.model.CrawlUrl;
 import cn.upshi.sparkpagerank.model.PageLink;
+import cn.upshi.sparkpagerank.model.PageRankResult;
 import cn.upshi.sparkpagerank.model.Task;
 import cn.upshi.sparkpagerank.util.FileUtil;
 import org.apache.log4j.Logger;
@@ -34,20 +37,27 @@ public class CrawlRunnable implements Runnable {
 
     private TaskDao taskDao;
 
+    private PageRankResultDao pageRankResultDao;
+
+    private GraphxPageRank graphxPageRank;
+
     private URLManager urlManager = new URLManager();
 
     // private IDownloader downloader = new HttpClientDownloader();
     private IDownloader downloader = new OkHttpDownloader();
 
-    public CrawlRunnable(Task task, CrawlUrlDao crawlUrlDao, PageLinkDao pageLinkDao, TaskDao taskDao) {
+    public CrawlRunnable(Task task, CrawlUrlDao crawlUrlDao, PageLinkDao pageLinkDao, TaskDao taskDao, PageRankResultDao pageRankResultDao, GraphxPageRank graphxPageRank) {
         this.task = task;
         this.crawlUrlDao = crawlUrlDao;
         this.pageLinkDao = pageLinkDao;
         this.taskDao = taskDao;
+        this.pageRankResultDao = pageRankResultDao;
+        this.graphxPageRank = graphxPageRank;
 
         //插入第一个链接
         CrawlUrl crawlUrl = new CrawlUrl();
         crawlUrl.setUrl(task.getStartUrl());
+        crawlUrl.setTaskId(task.getId());
         crawlUrlDao.insert(crawlUrl);
         crawlUrl.setTaskId(task.getId());
         //将第一个链接加入URL管理器
@@ -119,6 +129,7 @@ public class CrawlRunnable implements Runnable {
                             //插入这个不存在的链接
                             tempUrl = new CrawlUrl();
                             tempUrl.setUrl(href);
+                            tempUrl.setTaskId(taskId);
                             crawlUrlDao.insert(tempUrl);
                             logger.info("新增URL:" + tempUrl);
                             urlList.add(tempUrl);
@@ -142,6 +153,10 @@ public class CrawlRunnable implements Runnable {
             urlList.clear();
             // 将该链接加入已完成链接的集合中
             urlManager.addDoneUrl(crawlUrl.getUrl());
+
+            //设置task已完成的数量
+            task.setHasHandled(task.getHasHandled() + 1);
+            taskDao.updateByPrimaryKey(task);
         }
 
         // 查询所有title为空的crawlUrl，下载并且设置title
@@ -161,7 +176,7 @@ public class CrawlRunnable implements Runnable {
         //     }
         // }
 
-        //设置状态
+        //设置状态 已爬取完毕
         task.setStatus(Task.CRAWLEND);
         taskDao.updateByPrimaryKey(task);
 
@@ -172,11 +187,20 @@ public class CrawlRunnable implements Runnable {
         //生成link文件
         pageLinkDao.exportLinkFile(fileName);
 
-        //设置状态
+        //设置状态 已导出文件
         task.setStatus(Task.EXPORT);
         taskDao.updateByPrimaryKey(task);
 
+        //计算pagerank生成结果
+        List<PageRankResult> list = graphxPageRank.pageRank(taskId);
+        pageRankResultDao.insertBatch(list);
 
+        //设置状态 已计算结果
+        task.setStatus(Task.PAGERANK);
+        taskDao.updateByPrimaryKey(task);
+
+        //设置所有链接数
+        taskDao.selectAndSetTotalUrl(taskId);
 
     }
 

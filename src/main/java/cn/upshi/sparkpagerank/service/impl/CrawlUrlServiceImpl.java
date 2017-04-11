@@ -1,9 +1,11 @@
 package cn.upshi.sparkpagerank.service.impl;
 
+import cn.upshi.sparkpagerank.GraphxPageRank;
 import cn.upshi.sparkpagerank.crawl.CrawlRunnable;
 import cn.upshi.sparkpagerank.crawl.HttpClientDownloader;
 import cn.upshi.sparkpagerank.dao.CrawlUrlDao;
 import cn.upshi.sparkpagerank.dao.PageLinkDao;
+import cn.upshi.sparkpagerank.dao.PageRankResultDao;
 import cn.upshi.sparkpagerank.dao.TaskDao;
 import cn.upshi.sparkpagerank.model.CrawlUrl;
 import cn.upshi.sparkpagerank.model.Task;
@@ -32,9 +34,15 @@ public class CrawlUrlServiceImpl implements ICrawlUrlService {
     @Autowired
     private TaskDao taskDao;
 
+    @Autowired
+    private PageRankResultDao pageRankResultDao;
+
+    @Autowired
+    private GraphxPageRank graphxPageRank;
+
     @Override
     public void crawl(Task task) {
-        CrawlRunnable runnable = new CrawlRunnable(task, crawlUrlDao, pageLinkDao, taskDao);
+        CrawlRunnable runnable = new CrawlRunnable(task, crawlUrlDao, pageLinkDao, taskDao, pageRankResultDao, graphxPageRank);
         new Thread(runnable).start();
     }
 

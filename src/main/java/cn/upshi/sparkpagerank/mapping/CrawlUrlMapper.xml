@@ -43,9 +43,8 @@
   </delete>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.CrawlUrl">
-    insert into crawl_url (id, url, title, task_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{task_id,jdbcType=INTEGER}
+    insert into crawl_url (id, url, title, task_id)
+    values (#{id,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{taskId,jdbcType=INTEGER}
       )
   </insert>
 

@@ -16,26 +16,37 @@
     id, task_id, url_id, rank
   </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from page_rank_result
         where id = #{id,jdbcType=INTEGER}
-    </select>
+  </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from page_rank_result
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
-    <insert id="insert" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
     insert into page_rank_result (id, task_id, url_id, 
       rank)
     values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{urlId,jdbcType=INTEGER}, 
       #{rank,jdbcType=DOUBLE})
   </insert>
 
-    <insert id="insertSelective" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+        insert into page_rank_result (id, task_id, url_id,rank)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{id,jdbcType=INTEGER},
+             #{taskId,jdbcType=INTEGER},
+             #{urlId,jdbcType=INTEGER},
+             #{rank,jdbcType=DOUBLE})
+        </foreach>
+  </insert>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
         insert into page_rank_result
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -65,9 +76,9 @@
                 #{rank,jdbcType=DOUBLE},
             </if>
         </trim>
-    </insert>
+  </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
         update page_rank_result
         <set>
             <if test="taskId != null">
@@ -81,9 +92,9 @@
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
-    </update>
+  </update>
 
-    <update id="updateByPrimaryKey" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
+  <update id="updateByPrimaryKey" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
     update page_rank_result
     set task_id = #{taskId,jdbcType=INTEGER},
       url_id = #{urlId,jdbcType=INTEGER},

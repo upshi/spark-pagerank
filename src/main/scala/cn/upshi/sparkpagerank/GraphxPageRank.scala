@@ -3,6 +3,7 @@ package cn.upshi.sparkpagerank
 import java.util
 
 import cn.upshi.sparkpagerank.model.PageRankResult
+import cn.upshi.sparkpagerank.util.FileUtil
 import org.apache.spark.graphx.{GraphLoader, VertexId}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.springframework.stereotype.Component
@@ -25,9 +26,10 @@ class GraphxPageRank {
             .set("spark.executor.memory", "2G");
         val sc = new SparkContext(conf);
 
+        var fileName: String = FileUtil.linkFileName(taskId)
 
         // Load the edges as a graph
-        val graph = GraphLoader.edgeListFile(sc, "link.txt")
+        val graph = GraphLoader.edgeListFile(sc, fileName)
         // Run PageRank
         val ranks = graph.pageRank(0.0001).vertices
 

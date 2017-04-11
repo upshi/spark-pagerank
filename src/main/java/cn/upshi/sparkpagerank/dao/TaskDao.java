@@ -14,4 +14,6 @@ public interface TaskDao {
     int updateByPrimaryKeySelective(Task record);
 
     int updateByPrimaryKey(Task record);
+
+    int selectAndSetTotalUrl(Integer taskId);
 }

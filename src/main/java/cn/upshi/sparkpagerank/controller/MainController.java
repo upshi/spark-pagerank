@@ -32,8 +32,10 @@ public class MainController {
     public Map<String, Object> start(String startUrl, int total) {
         Map<String, Object> dataMap = new HashMap();
         Task task = new Task();
+        task.setHasHandled(0);
         task.setStartUrl(startUrl);
         task.setMaxHandled(total);
+        task.setTotalUrl(0);
         task.setStatus(Task.CREAT);
         Integer taskId = taskService.add(task);
         if(taskId == null) {
