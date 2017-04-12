@@ -64,4 +64,12 @@ public class TaskServiceImpl implements ITaskService {
         taskDao.truncate();
         pageRankResultDao.truncate();
     }
+
+    @Override
+    public void delete(int taskId) {
+        crawlUrlDao.deleteByTaskId(taskId);
+        pageLinkDao.deleteByTaskId(taskId);
+        taskDao.deleteByPrimaryKey(taskId);
+        pageRankResultDao.deleteByTaskId(taskId);
+    }
 }

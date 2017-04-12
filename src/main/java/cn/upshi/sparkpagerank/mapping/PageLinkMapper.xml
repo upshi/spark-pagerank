@@ -30,6 +30,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
+  <delete id="deleteByTaskId" parameterType="java.lang.Integer">
+        delete from page_link
+        where task_id = #{taskId,jdbcType=INTEGER}
+  </delete>
+
   <delete id="truncate">
       truncate table page_link
   </delete>

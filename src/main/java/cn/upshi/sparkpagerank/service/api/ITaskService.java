@@ -18,4 +18,6 @@ public interface ITaskService {
     Task get(int taskId);
 
     void truncate();
+
+    void delete(int taskId);
 }

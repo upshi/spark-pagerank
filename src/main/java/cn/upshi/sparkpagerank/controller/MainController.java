@@ -114,4 +114,18 @@ public class MainController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping("/deleteTask")
+    public Map<String, Object> deleteTask(int taskId) {
+        Task task = taskService.get(taskId);
+        if(task == null) {
+            return RespUtil.error("您输入的ID不存在!");
+        }
+        if(task.getStatus() == Task.CRAWLING) {
+            return RespUtil.error("任务尚未完成!");
+        }
+        taskService.delete(taskId);
+        return RespUtil.success(null);
+    }
+
 }

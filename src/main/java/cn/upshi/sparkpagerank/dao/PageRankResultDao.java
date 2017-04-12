@@ -24,4 +24,6 @@ public interface PageRankResultDao {
     void truncate();
 
     List<Result> selectByTaskId(int taskId);
+
+    void deleteByTaskId(Integer taskId);
 }

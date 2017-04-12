@@ -22,4 +22,5 @@ public interface TaskDao {
     void truncate();
 
     List<Task> search();
+
 }

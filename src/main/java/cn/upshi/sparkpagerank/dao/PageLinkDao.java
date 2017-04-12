@@ -17,4 +17,6 @@ public interface PageLinkDao {
     void truncate();
 
     void exportLinkFile(@Param("fileName") String fileName, @Param("taskId") Integer taskId);
+
+    void deleteByTaskId(Integer taskId);
 }
