@@ -44,8 +44,7 @@
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="cn.upshi.sparkpagerank.model.PageRankResult">
     insert into page_rank_result (id, task_id, url_id, rank)
-    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{urlId,jdbcType=INTEGER}, 
-      #{rank,jdbcType=VARCHAR})
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{urlId,jdbcType=INTEGER}, #{rank,jdbcType=VARCHAR})
   </insert>
 
   <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
