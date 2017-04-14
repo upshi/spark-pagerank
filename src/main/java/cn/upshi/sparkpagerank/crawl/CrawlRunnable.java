@@ -207,7 +207,6 @@ public class CrawlRunnable implements Runnable {
                 Document doc = downloader.download(url.getUrl());
                 try {
                     if(doc == null) {
-                        crawlUrlDao.deleteByPrimaryKey(url.getId());
                         continue;
                     }
                     url.setTitle(doc.title());
